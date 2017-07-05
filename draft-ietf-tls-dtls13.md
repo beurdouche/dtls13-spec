@@ -84,16 +84,17 @@ should be submitted as pull requests at https://github.com/tlswg/dtls13-spec.
 Instructions are on that page as well. Editorial changes can be managed in GitHub,
 but any substantive change should be discussed on the TLS mailing list.
 
-The primary goal of the TLS protocol is to provide privacy and data integrity
-between two communicating peers. The TLS protocol is composed of two layers:
-the TLS Record Protocol and the TLS Handshake Protocol. However, TLS must
+The primary goal of the TLS protocol is to provide confidentiality, integrity
+and authentication of the data exchanged between two communicating peers.
+The TLS protocol is composed of two layers:
+the TLS Record Protocol and the TLS Handshake Protocol. TLS must however
 run over a reliable transport channel -- typically TCP {{RFC0793}}.
 
-There are applications that utilize UDP {{RFC0768}} as a transport and to offer communication
-security protection for those applications the Datagram Transport Layer
-Security (DTLS) protocol has been designed. DTLS is deliberately designed to be
-as similar to TLS as possible, both to minimize new security invention and to
-maximize the amount of code and infrastructure reuse.
+For applications that utilize UDP {{RFC0768}} instead, or other unrelialable transport,
+and wish to use a secure channels for communication, the Datagram Transport Layer
+Security (DTLS) protocol gives similar guarantees to what TLS provides.
+DTLS is deliberately designed to be as similar to TLS as possible, both to minimize
+security differences and to maximize the amount of code and infrastructure reuse.
 
 DTLS 1.0 {{RFC4347}} was originally defined as a delta from TLS 1.1 {{RFC4346}} and
 DTLS 1.2 {{RFC6347}} was defined as a series of deltas to TLS 1.2 {{RFC5246}}.  There
@@ -270,7 +271,7 @@ verify the TLS MAC.  The DTLS record format is shown below:
 
    struct {
        ContentType opaque_type = 23; /* application_data */
-       ProtocolVersion legacy_record_version = {254,253); // DTLSv1.2
+       ProtocolVersion legacy_record_version = {0xFF,0xFE}; // DTLSv1.2
        uint16 epoch;                         // DTLS-related field
        uint48 sequence_number;               // DTLS-related field
        uint16 length;
